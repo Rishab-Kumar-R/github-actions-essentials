@@ -1,0 +1,35 @@
+name: environment variables
+
+on:
+  workflow_dispatch:
+env:
+  WORKFLOW_VAR: THIS_IS_WORKFLOW_SCOPED
+
+jobs:
+  job-1:
+    runs-on: ubuntu-24.04
+    env:
+      JOB_VAR: THIS_IS_JOB_1_SCOPED
+    steps:
+      - name: Inspect scoped job 1 step 1
+        env:
+          STEP_VAR: THIS_IS_STEP_SCOPED
+        run: |
+          echo "WORKFLOW_VAR: $WORKFLOW_VAR"    # inherited
+          echo "JOB_VAR: $JOB_VAR"              # inherited
+          echo "STEP_VAR: $STEP_VAR"            # defined here
+
+      - name: Inspect scoped job 1 step 2
+        run: |
+          echo "WORKFLOW_VAR: $WORKFLOW_VAR"    # still visible
+          echo "JOB_VAR: $JOB_VAR"              # still visible
+          echo "STEP_VAR: ${STEP_VAR:-<UNSET>}" # no longer defined
+
+  job-2:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Inspect scoped job 2 step 1
+        run: |
+          echo "WORKFLOW_VAR: $WORKFLOW_VAR"      # visible everywhere
+          echo "JOB_VAR: ${JOB_VAR:-<UNSET>}"      # not available (job-1 only)
+          echo "STEP_VAR: ${STEP_VAR:-<UNSET>}"    # not available
