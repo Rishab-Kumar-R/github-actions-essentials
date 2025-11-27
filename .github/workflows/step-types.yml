@@ -25,10 +25,10 @@ jobs:
 
           go run hello.go
 
-  say-hello-typescript-action:
+  say-hello-javascript-action:
     runs-on: ubuntu-24.04
     steps:
-      - name: Use TypeScript GitHub Action
-        uses: actions/hello-world-typescript-action@main
+      - name: Use JavaScript GitHub Action
+        uses: actions/hello-world-javascript-action@main
         with:
           who-to-greet: "World"
