@@ -1,0 +1,36 @@
+# by default all jobs run in parallel but we can structure the jobs in specific order by adding dependencies
+
+name: job dependencies
+
+on:
+  workflow_dispatch:
+
+jobs:
+  job-1:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "Each job is made up of"
+      - run: echo "a series of steps"
+      - run: echo "that always run one after another"
+      - run: echo "on the same virtual machine"
+
+  job-2:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "Different jobs, however, run at the same time by default"
+
+  job-3:
+    runs-on: ubuntu-24.04
+    needs:
+      - job-1
+      - job-2
+    steps:
+      - run: echo "You can control job order by declaring dependencies"
+
+  job-4:
+    runs-on: ubuntu-24.04
+    needs:
+      - job-2
+      - job-3
+    steps:
+      - run: echo "Chaining jobs like this builds a DAG of execution"
